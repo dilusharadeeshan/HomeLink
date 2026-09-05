@@ -48,10 +48,24 @@ class AuthControllerTest extends TestCase
         $this->assertDatabaseCount('users', 1);
     }
 
+    public function test_duplicate_email_is_rejected_case_insensitively(): void
+    {
+        User::factory()->create(['email' => 'Sam@Example.Test']);
+        $this->post('/register', $this->registration(['email' => 'sam@example.test']))->assertSessionHasErrors('email');
+        $this->assertDatabaseCount('users', 1);
+    }
+
     public function test_active_user_can_log_in(): void
     {
         $user = User::factory()->create(['password' => 'HomeLink@123']);
         $this->post('/login', ['email' => $user->email, 'password' => 'HomeLink@123'])->assertRedirectToRoute('dashboard');
+        $this->assertAuthenticatedAs($user);
+    }
+
+    public function test_login_accepts_mixed_case_email(): void
+    {
+        $user = User::factory()->create(['email' => 'sam@example.test', 'password' => 'HomeLink@123']);
+        $this->post('/login', ['email' => 'SAM@EXAMPLE.TEST', 'password' => 'HomeLink@123'])->assertRedirectToRoute('dashboard');
         $this->assertAuthenticatedAs($user);
     }
 

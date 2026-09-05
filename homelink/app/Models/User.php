@@ -17,6 +17,13 @@ class User extends Authenticatable
 
     protected $hidden = ['password', 'remember_token'];
 
+    protected static function booted(): void
+    {
+        static::saving(function (self $user): void {
+            $user->email = mb_strtolower(trim($user->email ?? ''));
+        });
+    }
+
     protected function casts(): array
     {
         return ['email_verified_at' => 'datetime', 'password' => 'hashed', 'is_active' => 'boolean'];
