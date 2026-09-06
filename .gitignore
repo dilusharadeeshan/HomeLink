@@ -1,0 +1,7 @@
+/tools/
+/.runtime/
+*.zip
+/homelink/.github/
+/homelink/.claude/
+/homelink/.mcp.json
+/homelink/.agents/

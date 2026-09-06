@@ -1,0 +1,25 @@
+@extends('layouts.app')
+@section('title',$booking->reference())
+@section('eyebrow','Booking details')
+@section('content')
+<a class="back-link" href="{{ auth()->user()->role==='admin' ? route('admin.index') : route('bookings.index') }}"><x-icon name="arrow-left" />Back to bookings</a>
+<div class="page-heading"><div><p class="eyebrow">{{ $booking->reference() }}</p><h1>{{ $booking->service_title }}</h1><p>Requested {{ $booking->created_at->format('d M Y, g:i A') }}</p></div><x-status :status="$booking->status" /></div>
+<div class="detail-grid booking-detail">
+<div>
+<section class="panel"><h2>The plan for your home</h2><div class="booking-facts"><div><x-icon name="calendar-days" /><span><small>Scheduled for</small><strong>{{ $booking->starts_at->format('l, d M Y') }}</strong><span>{{ $booking->starts_at->format('g:i A') }} – {{ $booking->starts_at->copy()->addHours(2)->format('g:i A') }} · Asia/Colombo</span></span></div><div><x-icon name="map-pin" /><span><small>Service address</small><strong>{{ $booking->address }}</strong></span></div><div><x-icon name="phone" /><span><small>Customer contact</small><strong>{{ $booking->phone }}</strong></span></div><div><x-icon name="wallet" /><span><small>Starting quote</small><strong>LKR {{ number_format($booking->quoted_price) }}</strong><span>Pay the provider directly. Agree any extras before work starts.</span></span></div></div>@if($booking->notes)<div class="info-box"><x-icon name="message-square" /><span class="preserve-lines">{{ $booking->notes }}</span></div>@endif</section>
+<section class="panel"><h2>Booking journey</h2><ol class="timeline">@foreach($booking->events as $event)<li><span class="timeline-point"><x-icon name="check" /></span><div><strong>{{ str($event->status)->replace('_',' ')->title() }}</strong><p>{{ $event->note }}</p><small>{{ $event->created_at->format('d M Y, g:i A') }} · {{ $event->actor->name }}</small></div></li>@endforeach</ol></section>
+@if($booking->review)<section class="panel"><h2>Your review</h2><div class="rating"><x-icon name="star" />{{ $booking->review->rating }} out of 5</div><p class="prose">{{ $booking->review->comment }}</p></section>
+@elseif($booking->status===\App\Enums\BookingStatus::Completed && auth()->id()===$booking->customer_id)<section class="panel"><h2>How did it go?</h2><p class="muted">Help another home find the right person.</p><form method="POST" action="{{ route('bookings.review',$booking) }}" data-submit>@csrf<label class="field">Your rating<select name="rating" required><option value="">Choose a rating</option>@foreach([5=>'5 — Excellent',4=>'4 — Good',3=>'3 — Okay',2=>'2 — Could be better',1=>'1 — Poor'] as $value=>$label)<option value="{{ $value }}" @selected(old('rating')==$value)>{{ $label }}</option>@endforeach</select></label><label class="field">Your experience<textarea name="comment" rows="3" required minlength="10" maxlength="1000">{{ old('comment') }}</textarea></label><button type="submit" class="btn btn-teal">Share review <x-icon name="arrow-right" /></button></form></section>@endif
+</div>
+<aside>
+<section class="panel"><p class="eyebrow">YOUR LOCAL EXPERT</p><div class="person"><span class="avatar avatar-large">{{ $booking->provider->initials() }}</span><div><h2>{{ $booking->provider->name }}</h2><span class="muted">{{ $booking->serviceListing->category->name }} · {{ $booking->provider->city }}</span></div></div>@if($booking->provider->phone)<a class="contact-link" href="tel:{{ $booking->provider->phone }}"><x-icon name="phone" />{{ $booking->provider->phone }}</a>@endif<div class="soft-divider"></div><p class="eyebrow">CUSTOMER</p><strong>{{ $booking->customer->name }}</strong><p class="muted">{{ $booking->customer->email }}</p></section>
+@if(auth()->id()===$booking->provider_id)
+<section class="panel"><h2>Next step</h2><p class="muted">Keep your customer informed as the job progresses.</p>
+@php($transitions = array_filter(\App\Enums\BookingStatus::cases(),fn($s)=>$booking->status->canTransitionTo($s)))
+@forelse($transitions as $next)<form method="POST" action="{{ route('bookings.update',$booking) }}" data-confirm="Mark this booking as {{ strtolower($next->label()) }}?">@csrf @method('PATCH')<input type="hidden" name="status" value="{{ $next->value }}"><button class="btn {{ $next->value==='rejected'?'btn-outline':'btn-teal' }} btn-full action-gap" type="submit">{{ match($next->value) {'accepted'=>'Accept booking','rejected'=>'Decline request','in_progress'=>'Start job','completed'=>'Mark as completed',default=>$next->label()} }}<x-icon name="arrow-right" /></button></form>@empty<div class="info-box"><x-icon name="circle-check" /><span>This booking is {{ strtolower($booking->status->label()) }}. No further action is needed.</span></div>@endforelse
+</section>@endif
+{{-- CUSTOMER_MAINTENANCE_ACTION --}}
+<section class="panel soft-panel"><x-icon name="hand-heart" class="teal" /><h3>A little communication helps.</h3><p class="muted">Keep your provider informed about access, materials, and any changes to the job.</p></section>
+</aside>
+</div>
+@endsection
