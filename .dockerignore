@@ -1,0 +1,17 @@
+.git
+**/.DS_Store
+homelink/.env
+homelink/.env.*
+homelink/.agents
+homelink/node_modules
+homelink/vendor
+homelink/tests
+homelink/public/build
+homelink/public/hot
+homelink/public/storage
+homelink/bootstrap/cache/*.php
+homelink/bootstrap/ssr
+homelink/storage/**
+homelink/database/*.sqlite*
+homelink/auth.json
+**/*.log
