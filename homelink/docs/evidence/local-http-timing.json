@@ -1,0 +1,147 @@
+{
+  "method": "20 sequential local HTTP GET requests, including response body; no browser assets, rendering or concurrent load. Not a production performance benchmark.",
+  "samples": [
+    {
+      "url": "http://127.0.0.1:8000/",
+      "request": 1,
+      "status": 200,
+      "milliseconds": 401.88,
+      "bytes": 30822
+    },
+    {
+      "url": "http://127.0.0.1:8000/",
+      "request": 2,
+      "status": 200,
+      "milliseconds": 289.65,
+      "bytes": 30822
+    },
+    {
+      "url": "http://127.0.0.1:8000/",
+      "request": 3,
+      "status": 200,
+      "milliseconds": 255.95,
+      "bytes": 30822
+    },
+    {
+      "url": "http://127.0.0.1:8000/",
+      "request": 4,
+      "status": 200,
+      "milliseconds": 235.6,
+      "bytes": 30822
+    },
+    {
+      "url": "http://127.0.0.1:8000/",
+      "request": 5,
+      "status": 200,
+      "milliseconds": 267.41,
+      "bytes": 30822
+    },
+    {
+      "url": "http://127.0.0.1:8000/",
+      "request": 6,
+      "status": 200,
+      "milliseconds": 249.27,
+      "bytes": 30822
+    },
+    {
+      "url": "http://127.0.0.1:8000/",
+      "request": 7,
+      "status": 200,
+      "milliseconds": 255.49,
+      "bytes": 30822
+    },
+    {
+      "url": "http://127.0.0.1:8000/",
+      "request": 8,
+      "status": 200,
+      "milliseconds": 266.22,
+      "bytes": 30822
+    },
+    {
+      "url": "http://127.0.0.1:8000/",
+      "request": 9,
+      "status": 200,
+      "milliseconds": 246.32,
+      "bytes": 30822
+    },
+    {
+      "url": "http://127.0.0.1:8000/",
+      "request": 10,
+      "status": 200,
+      "milliseconds": 231.89,
+      "bytes": 30822
+    },
+    {
+      "url": "http://127.0.0.1:8000/?category=electrical",
+      "request": 1,
+      "status": 200,
+      "milliseconds": 254.94,
+      "bytes": 20335
+    },
+    {
+      "url": "http://127.0.0.1:8000/?category=electrical",
+      "request": 2,
+      "status": 200,
+      "milliseconds": 231.66,
+      "bytes": 20335
+    },
+    {
+      "url": "http://127.0.0.1:8000/?category=electrical",
+      "request": 3,
+      "status": 200,
+      "milliseconds": 243.94,
+      "bytes": 20335
+    },
+    {
+      "url": "http://127.0.0.1:8000/?category=electrical",
+      "request": 4,
+      "status": 200,
+      "milliseconds": 225.5,
+      "bytes": 20335
+    },
+    {
+      "url": "http://127.0.0.1:8000/?category=electrical",
+      "request": 5,
+      "status": 200,
+      "milliseconds": 268.15,
+      "bytes": 20335
+    },
+    {
+      "url": "http://127.0.0.1:8000/?category=electrical",
+      "request": 6,
+      "status": 200,
+      "milliseconds": 353.1,
+      "bytes": 20335
+    },
+    {
+      "url": "http://127.0.0.1:8000/?category=electrical",
+      "request": 7,
+      "status": 200,
+      "milliseconds": 233.36,
+      "bytes": 20335
+    },
+    {
+      "url": "http://127.0.0.1:8000/?category=electrical",
+      "request": 8,
+      "status": 200,
+      "milliseconds": 246.24,
+      "bytes": 20335
+    },
+    {
+      "url": "http://127.0.0.1:8000/?category=electrical",
+      "request": 9,
+      "status": 200,
+      "milliseconds": 256.95,
+      "bytes": 20335
+    },
+    {
+      "url": "http://127.0.0.1:8000/?category=electrical",
+      "request": 10,
+      "status": 200,
+      "milliseconds": 293.91,
+      "bytes": 20335
+    }
+  ],
+  "median_ms": 255.22,
+  "maximum_ms": 401.88
+}
