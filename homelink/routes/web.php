@@ -29,6 +29,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/services/{listing:slug}/book', [BookingController::class, 'store'])->middleware(['role:customer', 'throttle:20,1'])->name('bookings.store');
     Route::patch('/bookings/{booking}/status', [BookingController::class, 'update'])->middleware('role:provider')->name('bookings.update');
     Route::post('/bookings/{booking}/review', [BookingController::class, 'review'])->middleware('role:customer')->name('bookings.review');
+    Route::post('/bookings/{booking}/cancel', [BookingController::class, 'cancel'])->middleware('role:customer')->name('bookings.cancel');
     Route::middleware('role:provider')->prefix('provider')->name('provider.')->group(function () {
         Route::get('/services', [ProviderController::class, 'index'])->name('services');
         Route::get('/services/create', [ProviderController::class, 'create'])->name('services.create');

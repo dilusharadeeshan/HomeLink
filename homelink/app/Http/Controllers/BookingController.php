@@ -70,4 +70,11 @@ class BookingController extends Controller
 
         return back()->with('success', 'Thank you. Your review is now visible on the service.');
     }
+
+    public function cancel(Request $request, Booking $booking, BookingService $service): RedirectResponse
+    {
+        $service->cancel($booking, $request->user());
+
+        return back()->with('success', 'Booking cancelled. Your provider can see the update.');
+    }
 }

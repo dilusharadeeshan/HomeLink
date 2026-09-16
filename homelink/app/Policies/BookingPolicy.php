@@ -22,4 +22,9 @@ class BookingPolicy
     {
         return $user->role === 'customer' && $user->id === $booking->customer_id && $booking->status === BookingStatus::Completed;
     }
+
+    public function cancel(User $user, Booking $booking): bool
+    {
+        return $user->role === 'customer' && $user->id === $booking->customer_id;
+    }
 }

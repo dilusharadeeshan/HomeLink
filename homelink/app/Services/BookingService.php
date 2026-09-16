@@ -56,4 +56,18 @@ class BookingService
             $booking->events()->create(['actor_id' => $actor->id, 'status' => $next->value, 'note' => 'Provider marked this booking as '.strtolower($next->label()).'.']);
         }, 3);
     }
+
+    public function cancel(Booking $booking, User $actor): void
+    {
+        DB::transaction(function () use ($booking, $actor): void {
+            $booking = Booking::whereKey($booking->id)->lockForUpdate()->firstOrFail();
+            Gate::forUser($actor)->authorize('cancel', $booking);
+            if (! in_array($booking->status, [BookingStatus::Pending, BookingStatus::Accepted]) || $booking->starts_at->lt(now()->addHours(2))) {
+                throw ValidationException::withMessages(['status' => 'Only pending or accepted bookings at least two hours away can be cancelled.']);
+            }
+            $booking->update(['status' => BookingStatus::Cancelled]);
+            DB::table('booking_slots')->where('booking_id', $booking->id)->delete();
+            $booking->events()->create(['actor_id' => $actor->id, 'status' => 'cancelled', 'note' => 'Customer cancelled this booking. The appointment slot is available again.']);
+        }, 3);
+    }
 }

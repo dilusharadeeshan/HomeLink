@@ -18,7 +18,10 @@
 @php($transitions = array_filter(\App\Enums\BookingStatus::cases(),fn($s)=>$booking->status->canTransitionTo($s)))
 @forelse($transitions as $next)<form method="POST" action="{{ route('bookings.update',$booking) }}" data-confirm="Mark this booking as {{ strtolower($next->label()) }}?">@csrf @method('PATCH')<input type="hidden" name="status" value="{{ $next->value }}"><button class="btn {{ $next->value==='rejected'?'btn-outline':'btn-teal' }} btn-full action-gap" type="submit">{{ match($next->value) {'accepted'=>'Accept booking','rejected'=>'Decline request','in_progress'=>'Start job','completed'=>'Mark as completed',default=>$next->label()} }}<x-icon name="arrow-right" /></button></form>@empty<div class="info-box"><x-icon name="circle-check" /><span>This booking is {{ strtolower($booking->status->label()) }}. No further action is needed.</span></div>@endforelse
 </section>@endif
-{{-- CUSTOMER_MAINTENANCE_ACTION --}}
+@if(auth()->id()===$booking->customer_id && in_array($booking->status,[\App\Enums\BookingStatus::Pending,\App\Enums\BookingStatus::Accepted]))
+<section class="panel"><h2>Plans changed?</h2><p class="muted">Cancel up to two hours before the appointment. Your provider’s time will become available again.</p>
+@if($booking->starts_at->gte(now()->addHours(2)))<form method="POST" action="{{ route('bookings.cancel',$booking) }}" data-confirm="Cancel this booking? This cannot be undone, but you can make a new request.">@csrf<button type="submit" class="btn btn-outline btn-full action-gap">Cancel booking <x-icon name="x" /></button></form>@else<p class="info-box">The online cancellation window has closed. Contact your provider to discuss the appointment.</p>@endif
+</section>@endif
 <section class="panel soft-panel"><x-icon name="hand-heart" class="teal" /><h3>A little communication helps.</h3><p class="muted">Keep your provider informed about access, materials, and any changes to the job.</p></section>
 </aside>
 </div>
