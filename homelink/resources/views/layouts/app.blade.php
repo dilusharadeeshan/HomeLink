@@ -7,10 +7,10 @@
 <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
 @vite(['resources/css/app.css','resources/js/app.js'])
 </head>
-<body x-data="{ menuOpen:false }" @keydown.escape.window="menuOpen=false">
+<body x-data="{ menuOpen:false, mobile:window.innerWidth <= 760 }" @resize.window="mobile=window.innerWidth <= 760" @keydown.escape.window="menuOpen=false">
 <a class="skip-link" href="#main-content">Skip to content</a>
 <button x-cloak x-show="menuOpen" class="sidebar-scrim" @click="menuOpen=false" aria-label="Close navigation"></button>
-<aside class="sidebar" :class="{'is-open':menuOpen}" aria-label="Main navigation">
+<aside class="sidebar" :class="{'is-open':menuOpen}" aria-label="Main navigation" :inert="mobile && !menuOpen" :aria-hidden="mobile && !menuOpen">
     <a class="brand" href="{{ route('home') }}"><span class="brand-mark"><x-icon name="house" /></span>HomeLink<span class="brand-dot">.</span></a>
     <div class="sidebar-label">YOUR HOME, SORTED</div>
     <nav class="nav-main">
@@ -38,7 +38,7 @@
     <header class="topbar">
         <button class="icon-button mobile-menu" @click="menuOpen=!menuOpen" aria-label="Toggle navigation" :aria-expanded="menuOpen"><x-icon name="menu" /></button>
         <div class="breadcrumb">HomeLink <span>/</span> <strong>@yield('eyebrow','Explore services')</strong></div>
-        <div class="top-actions"><span class="location"><x-icon name="map-pin" />Sri Lanka</span><span class="top-divider"></span>@auth<a class="avatar top-avatar" href="{{ route('profile') }}" aria-label="Open your profile">{{ auth()->user()->initials() }}</a>@else<a class="login-link" href="{{ route('login') }}">Log in</a><a class="btn btn-small btn-dark" href="{{ route('register') }}">Get started <x-icon name="arrow-up-right" /></a>@endauth</div>
+        <div class="top-actions">@if(config('homelink.demo'))<span class="demo-badge" title="Fictional accounts and reviews for the project demonstration">DEMO</span>@endif<span class="location"><x-icon name="map-pin" />Sri Lanka</span><span class="top-divider"></span>@auth<a class="avatar top-avatar" href="{{ route('profile') }}" aria-label="Open your profile">{{ auth()->user()->initials() }}</a>@else<a class="login-link" href="{{ route('login') }}">Log in</a><a class="btn btn-small btn-dark" href="{{ route('register') }}">Get started <x-icon name="arrow-up-right" /></a>@endauth</div>
     </header>
     <main id="main-content" class="main-content">
         @if(session('success'))<div class="flash flash-success" role="status"><x-icon name="circle-check" /><span>{{ session('success') }}</span></div>@endif
@@ -47,4 +47,7 @@
         <footer class="page-footer"><span>© {{ date('Y') }} HomeLink</span><span>{{ config('homelink.demo') ? 'Demo workspace · fictional data' : 'Good people. Better homes.' }}</span><a href="{{ route('how') }}">Help & booking guide <x-icon name="arrow-up-right" /></a></footer>
     </main>
 </div>
+<dialog id="confirmation-dialog" class="confirmation-dialog" aria-labelledby="confirm-title" aria-describedby="confirm-message">
+<div class="confirm-icon"><x-icon name="circle-help" /></div><h2 id="confirm-title">Confirm your action</h2><p id="confirm-message" data-confirm-message></p><div class="form-actions"><button type="button" class="btn btn-outline" data-confirm-cancel autofocus>Go back</button><button type="button" class="btn btn-teal" data-confirm-accept>Confirm</button></div>
+</dialog>
 </body></html>
