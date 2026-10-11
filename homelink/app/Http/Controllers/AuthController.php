@@ -14,6 +14,7 @@ class AuthController extends Controller
     public function login(Request $request): RedirectResponse
     {
         $data = $request->validate(['email' => ['required', 'email'], 'password' => ['required', 'string']]);
+        $data['email'] = mb_strtolower(trim($data['email']));
         if (! Auth::attempt([...$data, 'is_active' => true], $request->boolean('remember'))) {
             return back()->withErrors(['email' => 'These credentials do not match an active account.'])->onlyInput('email');
         }
@@ -25,7 +26,7 @@ class AuthController extends Controller
     public function register(Request $request): RedirectResponse
     {
         $data = $request->validate([
-            'name' => ['required', 'string', 'max:100'], 'email' => ['required', 'email', 'max:255', 'unique:users'],
+            'name' => ['required', 'string', 'max:100'], 'email' => ['required', 'email', 'max:255', Rule::unique('users')->where(fn ($query) => $query->whereRaw('LOWER(email) = ?', [mb_strtolower(trim($request->input('email')))]))],
             'password' => ['required', 'confirmed', Password::min(10)->mixedCase()->numbers()],
             'role' => ['required', Rule::in(['customer', 'provider'])],
             'phone' => ['required', 'regex:/^[+0-9 ()-]{9,20}$/'], 'city' => ['required', 'string', 'max:80'],
@@ -50,7 +51,7 @@ class AuthController extends Controller
     {
         $data = $request->validate([
             'name' => ['required', 'string', 'max:100'],
-            'email' => ['required', 'email', 'max:255', Rule::unique('users')->ignore($request->user()->id)],
+            'email' => ['required', 'email', 'max:255', Rule::unique('users')->ignore($request->user()->id)->where(fn ($query) => $query->whereRaw('LOWER(email) = ?', [mb_strtolower(trim($request->input('email')))]))],
             'phone' => ['required', 'regex:/^[+0-9 ()-]{9,20}$/'], 'city' => ['required', 'string', 'max:80'],
             'bio' => ['nullable', 'string', 'max:1500'],
         ]);
