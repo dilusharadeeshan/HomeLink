@@ -38,7 +38,10 @@ class AdminControllerTest extends TestCase
         $this->assertDatabaseHas('users', ['id' => $admin->id, 'is_active' => true]);
     }
 
-    
+    public static function ordinaryRoles(): array
+    {
+        return [['customer'], ['provider']];
+    }
 
     #[DataProvider('ordinaryRoles')]
     public function test_ordinary_users_cannot_open_admin_tools(string $role): void
