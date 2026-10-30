@@ -2,20 +2,25 @@ services:
   app:
     build: .
     ports:
-      - "127.0.0.1:8080:80"
+      - "${APP_BIND_ADDRESS:-127.0.0.1}:${APP_PORT:-8080}:80"
     environment:
       APP_NAME: HomeLink
-      APP_ENV: local
+      APP_ENV: production
+      APP_KEY: "${APP_KEY:?Set APP_KEY in the shell or a Compose .env file}"
       APP_DEBUG: "false"
-      APP_URL: http://127.0.0.1:8080
-      HOMELINK_DEMO: "true"
-      DEMO_SEED: "true"
+      APP_URL: "${APP_URL:?Set APP_URL to the public HTTPS URL}"
+      HOMELINK_DEMO: "false"
+      DEMO_SEED: "false"
       DB_CONNECTION: sqlite
       DB_DATABASE: /var/lib/homelink/database.sqlite
       SESSION_DRIVER: database
+      SESSION_ENCRYPT: "true"
+      SESSION_SECURE_COOKIE: "true"
+      SESSION_SAME_SITE: lax
       CACHE_STORE: database
       QUEUE_CONNECTION: sync
       LOG_CHANNEL: stderr
+      LOG_LEVEL: warning
     volumes:
       - homelink-data:/var/lib/homelink
       - homelink-storage:/var/www/html/storage

@@ -17,10 +17,11 @@ fi
 if [ "${DB_CONNECTION:-sqlite}" = "sqlite" ]; then
     touch "${DB_DATABASE:-/var/lib/homelink/database.sqlite}"
 fi
-php artisan optimize:clear
+php artisan config:clear
 php artisan migrate --force --no-interaction
 if [ "${DEMO_SEED:-false}" = "true" ] && [ "${APP_ENV:-production}" = "local" ]; then
     php artisan db:seed --force --no-interaction
 fi
+php artisan optimize
 chown -R www-data:www-data storage bootstrap/cache /var/lib/homelink
 exec docker-php-entrypoint "$@"
