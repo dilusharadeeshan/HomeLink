@@ -21,6 +21,10 @@ if [ "${DB_CONNECTION:-sqlite}" = "sqlite" ]; then
 fi
 php artisan config:clear
 php artisan migrate --force --no-interaction
+# TEMPORARY: Remove this block after the first successful production admin seed.
+if [ "${SEED_INITIAL_ADMIN:-false}" = "true" ]; then
+    php artisan db:seed --class=AdminUserSeeder --force --no-interaction
+fi
 if [ "${DEMO_SEED:-false}" = "true" ] && [ "${APP_ENV:-production}" = "local" ]; then
     php artisan db:seed --force --no-interaction
 fi
