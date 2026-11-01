@@ -1,7 +1,7 @@
 @props(['listing'])
 <article class="service-card">
     <a href="{{ route('services.show',$listing->slug) }}" class="service-image-link" aria-label="View {{ $listing->title }}">
-        <img class="service-image" src="{{ asset('images/'.$listing->category->slug.'.jpg') }}" alt="{{ $listing->category->name }} home service" loading="lazy" width="640" height="420">
+        <img class="service-image" src="{{ $listing->category->imageUrl() }}" alt="{{ $listing->category->name }} home service" loading="lazy" width="640" height="420">
         <span class="image-category"><x-icon :name="$listing->category->icon" />{{ $listing->category->name }}</span>
         <span class="image-arrow"><x-icon name="arrow-up-right" /></span>
     </a>

@@ -16,4 +16,11 @@ class Category extends Model
     {
         return $this->hasMany(ServiceListing::class);
     }
+
+    public function imageUrl(): string
+    {
+        $image = 'images/'.$this->slug.'.jpg';
+
+        return asset(file_exists(public_path($image)) ? $image : 'images/home.jpg');
+    }
 }

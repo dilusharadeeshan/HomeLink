@@ -40,6 +40,20 @@ Route::middleware('auth')->group(function () {
     });
     Route::middleware('role:admin')->prefix('admin')->name('admin.')->group(function () {
         Route::get('/', [AdminController::class, 'index'])->name('index');
+        Route::patch('/users/{user}/role', [AdminController::class, 'updateRole'])->name('users.role');
         Route::patch('/users/{user}/status', [AdminController::class, 'toggle'])->name('users.toggle');
+        Route::get('/categories', [AdminController::class, 'categories'])->name('categories');
+        Route::post('/categories', [AdminController::class, 'storeCategory'])->name('categories.store');
+        Route::put('/categories/{category}', [AdminController::class, 'updateCategory'])->name('categories.update');
+        Route::delete('/categories/{category}', [AdminController::class, 'destroyCategory'])->name('categories.destroy');
+        Route::get('/services', [AdminController::class, 'services'])->name('services');
+        Route::get('/services/{listing}/edit', [AdminController::class, 'editService'])->name('services.edit');
+        Route::put('/services/{listing}', [AdminController::class, 'updateService'])->name('services.update');
+        Route::patch('/services/{listing}/status', [AdminController::class, 'toggleService'])->name('services.toggle');
+        Route::delete('/services/{listing}', [AdminController::class, 'destroyService'])->name('services.destroy');
+        Route::get('/bookings', [AdminController::class, 'bookings'])->name('bookings');
+        Route::patch('/bookings/{booking}/status', [AdminController::class, 'updateBookingStatus'])->name('bookings.status');
+        Route::get('/reviews', [AdminController::class, 'reviews'])->name('reviews');
+        Route::delete('/reviews/{review}', [AdminController::class, 'destroyReview'])->name('reviews.destroy');
     });
 });
