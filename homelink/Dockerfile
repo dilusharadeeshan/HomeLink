@@ -58,8 +58,8 @@ COPY --from=assets /app/public/build /var/www/html/public/build
 COPY docker/entrypoint.sh /usr/local/bin/homelink-entrypoint
 RUN sed -i 's/\r$//' /usr/local/bin/homelink-entrypoint \
     && chmod +x /usr/local/bin/homelink-entrypoint \
-    && mkdir -p /var/lib/homelink storage/framework/cache/data storage/framework/sessions storage/framework/views storage/logs \
-    && chown -R www-data:www-data storage bootstrap/cache /var/lib/homelink
+    && mkdir -p /var/lib/homelink /var/lib/homelink-db storage/framework/cache/data storage/framework/sessions storage/framework/views storage/logs \
+    && chown -R www-data:www-data storage bootstrap/cache /var/lib/homelink /var/lib/homelink-db
 EXPOSE 80
 ENTRYPOINT ["homelink-entrypoint"]
 CMD ["apache2-foreground"]

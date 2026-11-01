@@ -1,7 +1,7 @@
 #!/bin/sh
 set -eu
 cd /var/www/html
-mkdir -p /var/lib/homelink storage/app/runtime storage/framework/cache/data storage/framework/sessions storage/framework/views storage/logs bootstrap/cache
+mkdir -p /var/lib/homelink /var/lib/homelink-db storage/app/runtime storage/framework/cache/data storage/framework/sessions storage/framework/views storage/logs bootstrap/cache
 if [ -z "${APP_KEY:-}" ]; then
     if [ "${APP_ENV:-production}" = "production" ]; then
         echo "Provide APP_KEY through your production secret configuration." >&2
@@ -15,7 +15,9 @@ if [ -z "${APP_KEY:-}" ]; then
     export APP_KEY
 fi
 if [ "${DB_CONNECTION:-sqlite}" = "sqlite" ]; then
-    touch "${DB_DATABASE:-/var/lib/homelink/database.sqlite}"
+    database_path="${DB_DATABASE:-/var/lib/homelink-db/database.sqlite}"
+    mkdir -p "$(dirname "$database_path")"
+    touch "$database_path"
 fi
 php artisan config:clear
 php artisan migrate --force --no-interaction
@@ -23,5 +25,5 @@ if [ "${DEMO_SEED:-false}" = "true" ] && [ "${APP_ENV:-production}" = "local" ];
     php artisan db:seed --force --no-interaction
 fi
 php artisan optimize
-chown -R www-data:www-data storage bootstrap/cache /var/lib/homelink
+chown -R www-data:www-data storage bootstrap/cache /var/lib/homelink /var/lib/homelink-db
 exec docker-php-entrypoint "$@"

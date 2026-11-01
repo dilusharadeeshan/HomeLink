@@ -12,7 +12,7 @@ services:
       HOMELINK_DEMO: "false"
       DEMO_SEED: "false"
       DB_CONNECTION: sqlite
-      DB_DATABASE: /var/lib/homelink/database.sqlite
+      DB_DATABASE: /var/lib/homelink-db/database.sqlite
       SESSION_DRIVER: database
       SESSION_ENCRYPT: "true"
       SESSION_SECURE_COOKIE: "true"
@@ -23,6 +23,7 @@ services:
       LOG_LEVEL: warning
     volumes:
       - homelink-data:/var/lib/homelink
+      - homelink-database:/var/lib/homelink-db
       - homelink-storage:/var/www/html/storage
     healthcheck:
       test: ["CMD", "php", "-r", "exit(@file_get_contents('http://127.0.0.1/up') === false ? 1 : 0);"]
@@ -32,4 +33,5 @@ services:
       start_period: 30s
 volumes:
   homelink-data:
+  homelink-database:
   homelink-storage:
