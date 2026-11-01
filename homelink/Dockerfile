@@ -1,6 +1,9 @@
 FROM php:8.4-apache AS php-base
-RUN apt-get update && apt-get install -y --no-install-recommends libicu-dev libzip-dev libonig-dev libsqlite3-dev unzip git \
-    && docker-php-ext-install pdo_sqlite pdo_mysql mbstring intl zip opcache \
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        libicu-dev libzip-dev libonig-dev libsqlite3-dev libpng-dev libjpeg62-turbo-dev \
+        libfreetype6-dev zip unzip git curl \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install pdo_sqlite pdo_mysql mbstring exif pcntl bcmath gd intl zip opcache \
     && a2enmod headers rewrite \
     && printf '%s\n' \
         'expose_php=Off' \
