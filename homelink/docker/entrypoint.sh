@@ -25,7 +25,8 @@ php artisan migrate --force --no-interaction
 if [ "${SEED_INITIAL_ADMIN:-false}" = "true" ]; then
     php artisan db:seed --class=AdminUserSeeder --force --no-interaction
 fi
-if [ "${DEMO_SEED:-false}" = "true" ] && [ "${APP_ENV:-production}" = "local" ]; then
+# Demo records are opt-in, require visible demo mode, and run idempotently after the first successful seed.
+if [ "${DEMO_SEED:-false}" = "true" ] && [ "${HOMELINK_DEMO:-false}" = "true" ]; then
     php artisan db:seed --force --no-interaction
 fi
 php artisan optimize

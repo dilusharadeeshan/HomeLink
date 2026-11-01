@@ -15,17 +15,28 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        if (! app()->environment(['local', 'testing'])) {
-            throw new \RuntimeException('Demo seeding is allowed only in local or testing environments.');
+        $explicitDemoDeployment = config('homelink.demo') && filter_var(env('DEMO_SEED', false), FILTER_VALIDATE_BOOL);
+
+        if (! app()->environment(['local', 'testing']) && ! $explicitDemoDeployment) {
+            throw new \RuntimeException('Demo seeding requires a local/testing environment or explicit demo deployment settings.');
         }
-        if (User::where('email', 'admin@homelink.test')->exists()) {
+        $demoPassword = env('DEMO_ACCOUNT_PASSWORD');
+        if ($explicitDemoDeployment && (! is_string($demoPassword) || $demoPassword === '')) {
+            throw new \RuntimeException('Set DEMO_ACCOUNT_PASSWORD before seeding demo accounts in production.');
+        }
+        if (User::where('email', 'customer@homelink.test')->exists()) {
             $this->command?->info('Demo data already exists; nothing changed.');
 
             return;
         }
         DB::transaction(function (): void {
-            $password = Hash::make('HomeLink@123');
-            $admin = User::create(['name' => 'HomeLink Admin', 'email' => 'admin@homelink.test', 'password' => $password, 'role' => 'admin', 'phone' => '0770000001', 'city' => 'Colombo']);
+            $password = Hash::make((string) env('DEMO_ACCOUNT_PASSWORD', 'HomeLink@123'));
+            $admin = User::where('email', 'admin@homelink.test')->first();
+            if ($admin !== null) {
+                $admin->forceFill(['role' => 'admin', 'is_active' => true])->save();
+            } else {
+                User::create(['name' => 'HomeLink Admin', 'email' => 'admin@homelink.test', 'password' => $password, 'role' => 'admin', 'phone' => '0770000001', 'city' => 'Colombo']);
+            }
             $customer = User::create(['name' => 'Amaya Fernando', 'email' => 'customer@homelink.test', 'password' => $password, 'role' => 'customer', 'phone' => '0771234567', 'city' => 'Colombo']);
             $reviewers = collect([$customer]);
             foreach (['Dinuka Silva', 'Tharushi Jayasekara', 'Kavindu Fernando'] as $i => $name) {
