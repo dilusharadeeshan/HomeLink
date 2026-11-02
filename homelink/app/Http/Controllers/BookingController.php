@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\BookingStatus;
 use App\Models\Booking;
 use App\Models\ServiceListing;
+use App\Services\BookingNotificationService;
 use App\Services\BookingService;
 use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Http\RedirectResponse;
@@ -34,7 +35,7 @@ class BookingController extends Controller
         return view('booking', ['booking' => $booking->load(['customer', 'provider', 'serviceListing.category', 'events.actor', 'review'])]);
     }
 
-    public function store(Request $request, ServiceListing $listing, BookingService $service): RedirectResponse
+    public function store(Request $request, ServiceListing $listing, BookingService $service, BookingNotificationService $notifications): RedirectResponse
     {
         $data = $request->validate([
             'date' => ['required', 'date_format:Y-m-d', 'after_or_equal:today', 'before_or_equal:'.now()->addDays(90)->toDateString()],
@@ -43,17 +44,20 @@ class BookingController extends Controller
             'phone' => ['required', 'regex:/^[+0-9 ()-]{9,20}$/'], 'notes' => ['nullable', 'string', 'max:2000'],
         ]);
         $booking = $service->create($request->user(), $listing, $data);
+        $notifications->requestCreated($booking);
 
         return redirect()->route('bookings.show', $booking)->with('success', 'Your booking request is on its way.');
     }
 
-    public function update(Request $request, Booking $booking, BookingService $service): RedirectResponse
+    public function update(Request $request, Booking $booking, BookingService $service, BookingNotificationService $notifications): RedirectResponse
     {
         $data = $request->validate([
             'status' => ['required', Rule::enum(BookingStatus::class)],
             'rejection_reason' => ['exclude_unless:status,rejected', 'required', 'string', 'min:5', 'max:1000'],
         ]);
-        $service->transition($booking, $request->user(), BookingStatus::from($data['status']), $data['rejection_reason'] ?? null);
+        $status = BookingStatus::from($data['status']);
+        $service->transition($booking, $request->user(), $status, $data['rejection_reason'] ?? null);
+        $notifications->statusChanged($booking->refresh(), $status);
 
         return back()->with('success', 'Booking status updated.');
     }
@@ -74,9 +78,10 @@ class BookingController extends Controller
         return back()->with('success', 'Thank you. Your review is now visible on the service.');
     }
 
-    public function cancel(Request $request, Booking $booking, BookingService $service): RedirectResponse
+    public function cancel(Request $request, Booking $booking, BookingService $service, BookingNotificationService $notifications): RedirectResponse
     {
         $service->cancel($booking, $request->user());
+        $notifications->cancelled($booking->refresh());
 
         return back()->with('success', 'Booking cancelled. Your provider can see the update.');
     }

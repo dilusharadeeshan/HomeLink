@@ -19,6 +19,14 @@ services:
       SESSION_SAME_SITE: lax
       CACHE_STORE: database
       QUEUE_CONNECTION: sync
+      MAIL_MAILER: "${MAIL_MAILER:-log}"
+      MAIL_SCHEME: "${MAIL_SCHEME:-smtp}"
+      MAIL_HOST: "${MAIL_HOST:-127.0.0.1}"
+      MAIL_PORT: "${MAIL_PORT:-2525}"
+      MAIL_USERNAME: "${MAIL_USERNAME:-}"
+      MAIL_PASSWORD: "${MAIL_PASSWORD:-}"
+      MAIL_FROM_ADDRESS: "${MAIL_FROM_ADDRESS:-hello@example.test}"
+      MAIL_FROM_NAME: "${MAIL_FROM_NAME:-HomeLink}"
       LOG_CHANNEL: stderr
       LOG_LEVEL: warning
     volumes:
