@@ -1054,24 +1054,79 @@ svg.lucide {
     color: #919d92;
     margin-top: 3px;
 }
-.page-footer {
-    margin-top: 36px;
-    min-height: 70px;
+.site-footer {
+    margin-top: 44px;
+    padding: 28px 0 18px;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+}
+.site-footer-main {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(130px, 1fr) minmax(150px, 1fr);
+    gap: 32px;
+    padding-bottom: 25px;
+}
+.site-footer-brand {
+    display: inline-flex;
+    align-items: center;
+    font-family: "Manrope", sans-serif;
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: -0.7px;
+    color: var(--ink);
+}
+.site-footer-brand > span:first-child {
+    display: grid;
+    place-items: center;
+    width: 27px;
+    height: 27px;
+    margin-right: 8px;
+    border-radius: 8px;
+    background: var(--teal);
+    color: #fff;
+}
+.site-footer-brand svg {
+    width: 17px;
+    height: 17px;
+}
+.site-footer-dot {
+    color: var(--teal);
+}
+.site-footer-about p {
+    max-width: 340px;
+    margin-top: 10px;
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.7;
+}
+.site-footer-nav {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+}
+.site-footer-nav h2 {
+    margin: 0 0 2px;
+    color: var(--ink);
+    font-size: 12px;
+    font-weight: 700;
+}
+.site-footer-nav a {
+    color: var(--muted);
+    font-size: 12px;
+    transition: color 0.2s;
+}
+.site-footer-nav a:hover {
+    color: var(--teal);
+}
+.site-footer-bottom {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    gap: 20px;
+    gap: 14px;
+    padding-top: 15px;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
     font-size: 10px;
-    color: #99a197;
-}
-.page-footer a {
-    display: flex;
-    gap: 7px;
-    align-items: center;
-}
-.page-footer svg {
-    width: 12px;
-    height: 12px;
 }
 .pagination {
     margin-top: 24px;
@@ -2863,14 +2918,6 @@ details p {
     .promise-strip small {
         font-size: 11px;
     }
-    .page-footer {
-        font-size: 9px;
-        gap: 8px;
-        margin-top: 25px;
-    }
-    .page-footer > span:nth-child(2) {
-        display: none;
-    }
     .nav-link {
         font-size: 14px;
         gap: 13px;
@@ -3034,6 +3081,21 @@ details p {
     }
     .booking-panel .time-slots {
         grid-template-columns: repeat(3, 1fr);
+    }
+    .site-footer {
+        margin-top: 30px;
+        padding-top: 23px;
+    }
+    .site-footer-main {
+        grid-template-columns: 1fr 1fr;
+        gap: 22px 18px;
+    }
+    .site-footer-about {
+        grid-column: 1 / -1;
+    }
+    .site-footer-bottom {
+        flex-direction: column;
+        gap: 5px;
     }
 }
 @media (max-width: 440px) {
@@ -3203,7 +3265,6 @@ details p {
 @media print {
     .sidebar,
     .topbar,
-    .page-footer,
     .btn,
     .search-bar,
     .filter-tabs {
@@ -3274,7 +3335,6 @@ details p {
 .card-description,
 .provider-line,
 .card-location,
-.page-footer,
 .section-overline,
 .sidebar-label,
 .date-chip,
@@ -3288,9 +3348,6 @@ details p {
 .timeline small,
 .review small {
     color: #65766b;
-}
-.page-footer {
-    font-size: 11px;
 }
 .card-description {
     font-size: 12px;

@@ -46,7 +46,7 @@
         @if(session('success'))<div class="flash flash-success" role="status"><x-icon name="circle-check" /><span>{{ session('success') }}</span></div>@endif
         @if($errors->any())<div class="flash flash-error" role="alert"><x-icon name="circle-alert" /><div><strong>Please check the following</strong><ul>@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul></div></div>@endif
         @yield('content')
-        <footer class="page-footer"><span>© {{ date('Y') }} HomeLink</span><span>{{ config('homelink.demo') ? 'Demo workspace · fictional data' : 'Good people. Better homes.' }}</span><a href="{{ route('how') }}">Help & booking guide <x-icon name="arrow-up-right" /></a></footer>
+        @include('partials.site-footer')
     </main>
 </div>
 <dialog id="confirmation-dialog" class="confirmation-dialog" aria-labelledby="confirm-title" aria-describedby="confirm-message">
