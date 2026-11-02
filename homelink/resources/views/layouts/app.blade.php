@@ -46,8 +46,8 @@
         @if(session('success'))<div class="flash flash-success" role="status"><x-icon name="circle-check" /><span>{{ session('success') }}</span></div>@endif
         @if($errors->any())<div class="flash flash-error" role="alert"><x-icon name="circle-alert" /><div><strong>Please check the following</strong><ul>@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul></div></div>@endif
         @yield('content')
-        @include('partials.site-footer')
     </main>
+    @include('partials.site-footer')
 </div>
 <dialog id="confirmation-dialog" class="confirmation-dialog" aria-labelledby="confirm-title" aria-describedby="confirm-message">
 <div class="confirm-icon"><x-icon name="circle-help" /></div><h2 id="confirm-title">Confirm your action</h2><p id="confirm-message" data-confirm-message></p><div class="form-actions"><button type="button" class="btn btn-outline" data-confirm-cancel autofocus>Go back</button><button type="button" class="btn btn-teal" data-confirm-accept>Confirm</button></div>

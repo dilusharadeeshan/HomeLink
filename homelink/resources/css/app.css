@@ -189,6 +189,7 @@ svg.lucide {
     color: white;
     width: 34px;
     height: 36px;
+    flex: 0 0 34px;
     border-radius: 11px;
     margin-right: 10px;
     transform: rotate(-4deg);
@@ -235,6 +236,11 @@ svg.lucide {
         background 0.2s,
         color 0.2s,
         transform 0.2s;
+}
+.nav-link svg {
+    width: 20px;
+    height: 20px;
+    flex: 0 0 20px;
 }
 .nav-link:hover {
     background: #f1f6f3;
@@ -355,7 +361,7 @@ svg.lucide {
 .main-content {
     max-width: 1510px;
     margin: 0 auto;
-    padding: 35px 42px 0;
+    padding: 35px 42px 44px;
 }
 .page-heading {
     display: flex;
@@ -1055,10 +1061,14 @@ svg.lucide {
     margin-top: 3px;
 }
 .site-footer {
-    margin-top: 44px;
-    padding: 28px 0 18px;
-    border-top: 1px solid var(--border);
-    color: var(--muted);
+    width: 100%;
+    background-color: #112e35;
+    color: #d4e0dc;
+}
+.site-footer-inner {
+    max-width: 1510px;
+    margin: 0 auto;
+    padding: 32px 42px 20px;
 }
 .site-footer-main {
     display: grid;
@@ -1073,7 +1083,7 @@ svg.lucide {
     font-size: 18px;
     font-weight: 800;
     letter-spacing: -0.7px;
-    color: var(--ink);
+    color: #fff;
 }
 .site-footer-brand > span:first-child {
     display: grid;
@@ -1090,12 +1100,12 @@ svg.lucide {
     height: 17px;
 }
 .site-footer-dot {
-    color: var(--teal);
+    color: #77cdb4;
 }
 .site-footer-about p {
     max-width: 340px;
     margin-top: 10px;
-    color: var(--muted);
+    color: #c1d0cb;
     font-size: 12px;
     line-height: 1.7;
 }
@@ -1107,25 +1117,25 @@ svg.lucide {
 }
 .site-footer-nav h2 {
     margin: 0 0 2px;
-    color: var(--ink);
+    color: #fff;
     font-size: 12px;
     font-weight: 700;
 }
 .site-footer-nav a {
-    color: var(--muted);
+    color: #c1d0cb;
     font-size: 12px;
     transition: color 0.2s;
 }
 .site-footer-nav a:hover {
-    color: var(--teal);
+    color: #8ed8c1;
 }
 .site-footer-bottom {
     display: flex;
     justify-content: space-between;
     gap: 14px;
     padding-top: 15px;
-    border-top: 1px solid var(--border);
-    color: var(--muted);
+    border-top: 1px solid #ffffff30;
+    color: #b7c8c2;
     font-size: 10px;
 }
 .pagination {
@@ -2355,7 +2365,11 @@ details p {
         margin-left: 212px;
     }
     .main-content {
-        padding: 28px 28px 0;
+        padding: 28px 28px 44px;
+    }
+    .site-footer-inner {
+        padding-right: 28px;
+        padding-left: 28px;
     }
     .topbar {
         padding: 0 28px;
@@ -2440,6 +2454,7 @@ details p {
     .brand-mark {
         width: 30px;
         height: 32px;
+        flex-basis: 30px;
         margin-right: 7px;
     }
     .nav-link {
@@ -2449,6 +2464,8 @@ details p {
     }
     .nav-link svg {
         width: 17px;
+        height: 17px;
+        flex-basis: 17px;
     }
     .sidebar-label {
         font-size: 9px;
@@ -2464,7 +2481,11 @@ details p {
         font-size: 10px;
     }
     .main-content {
-        padding: 26px 23px 0;
+        padding: 26px 23px 44px;
+    }
+    .site-footer-inner {
+        padding-right: 23px;
+        padding-left: 23px;
     }
     .topbar {
         height: 76px;
@@ -2741,7 +2762,7 @@ details p {
         font-size: 10px;
     }
     .main-content {
-        padding: 25px 20px 0;
+        padding: 25px 20px 32px;
     }
     .page-heading {
         margin-bottom: 23px;
@@ -3083,8 +3104,10 @@ details p {
         grid-template-columns: repeat(3, 1fr);
     }
     .site-footer {
-        margin-top: 30px;
-        padding-top: 23px;
+        padding: 0;
+    }
+    .site-footer-inner {
+        padding: 23px 20px 17px;
     }
     .site-footer-main {
         grid-template-columns: 1fr 1fr;
