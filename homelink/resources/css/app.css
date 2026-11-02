@@ -951,6 +951,49 @@ svg.lucide {
     height: 58px;
     font-size: 18px;
 }
+.profile-photo-control {
+    display: grid;
+    justify-items: center;
+    gap: 5px;
+    flex: 0 0 auto;
+}
+.profile-photo-trigger {
+    display: grid;
+    justify-items: center;
+    gap: 4px;
+    cursor: pointer;
+    color: var(--teal);
+}
+.profile-photo-trigger .avatar {
+    position: relative;
+    overflow: hidden;
+    transition: outline-color 0.2s, transform 0.2s;
+    outline: 3px solid transparent;
+}
+.profile-photo-overlay {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    border-radius: inherit;
+    background: #193038a8;
+    color: #fff;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+.profile-photo-overlay svg {
+    width: 20px;
+    height: 20px;
+}
+.profile-photo-trigger:hover .profile-photo-overlay,
+.profile-photo-control:focus-within .profile-photo-overlay {
+    opacity: 1;
+}
+.profile-photo-trigger:hover .avatar,
+.profile-photo-control:focus-within .avatar {
+    outline-color: var(--teal-light);
+    transform: scale(1.04);
+}
 .card-bottom {
     border-top: 1px solid #edf1ee;
     padding: 13px 0 14px;

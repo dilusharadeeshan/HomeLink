@@ -49,8 +49,11 @@ class BookingController extends Controller
 
     public function update(Request $request, Booking $booking, BookingService $service): RedirectResponse
     {
-        $data = $request->validate(['status' => ['required', Rule::enum(BookingStatus::class)]]);
-        $service->transition($booking, $request->user(), BookingStatus::from($data['status']));
+        $data = $request->validate([
+            'status' => ['required', Rule::enum(BookingStatus::class)],
+            'rejection_reason' => ['exclude_unless:status,rejected', 'required', 'string', 'min:5', 'max:1000'],
+        ]);
+        $service->transition($booking, $request->user(), BookingStatus::from($data['status']), $data['rejection_reason'] ?? null);
 
         return back()->with('success', 'Booking status updated.');
     }

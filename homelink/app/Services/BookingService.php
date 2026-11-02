@@ -41,19 +41,28 @@ class BookingService
         }
     }
 
-    public function transition(Booking $booking, User $actor, BookingStatus $next): void
+    public function transition(Booking $booking, User $actor, BookingStatus $next, ?string $rejectionReason = null): void
     {
-        DB::transaction(function () use ($booking, $actor, $next) {
+        DB::transaction(function () use ($booking, $actor, $next, $rejectionReason) {
             $booking = Booking::whereKey($booking->id)->lockForUpdate()->firstOrFail();
             Gate::forUser($actor)->authorize('update', $booking);
             if (! $booking->status->canTransitionTo($next)) {
                 throw ValidationException::withMessages(['status' => 'That status change is no longer available. Refresh and try again.']);
             }
-            $booking->update(['status' => $next]);
+            $booking->update([
+                'status' => $next,
+                'rejection_reason' => $next === BookingStatus::Rejected ? $rejectionReason : null,
+            ]);
             if ($next === BookingStatus::Rejected) {
                 DB::table('booking_slots')->where('booking_id', $booking->id)->delete();
             }
-            $booking->events()->create(['actor_id' => $actor->id, 'status' => $next->value, 'note' => 'Provider marked this booking as '.strtolower($next->label()).'.']);
+            $booking->events()->create([
+                'actor_id' => $actor->id,
+                'status' => $next->value,
+                'note' => $next === BookingStatus::Rejected
+                    ? 'Provider declined this booking and shared a reason.'
+                    : 'Provider marked this booking as '.strtolower($next->label()).'.',
+            ]);
         }, 3);
     }
 
