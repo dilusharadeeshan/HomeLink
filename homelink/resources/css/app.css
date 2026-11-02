@@ -209,6 +209,14 @@ svg.lucide {
     color: #889390;
     margin: 0 12px 17px;
 }
+.sidebar-scroll {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+}
 .nav-main {
     display: grid;
     gap: 7px;
@@ -243,8 +251,7 @@ svg.lucide {
     margin-top: 42px;
 }
 .sidebar-bottom {
-    margin-top: auto;
-    padding-top: 28px;
+    flex: 0 0 auto;
 }
 .side-note {
     border: 1px solid #e7eee7;

@@ -12,6 +12,7 @@
 <button x-cloak x-show="menuOpen" class="sidebar-scrim" @click="menuOpen=false" aria-label="Close navigation"></button>
 <aside class="sidebar" :class="{'is-open':menuOpen}" aria-label="Main navigation" :inert="mobile && !menuOpen" :aria-hidden="mobile && !menuOpen">
     <a class="brand" href="{{ route('home') }}"><span class="brand-mark"><x-icon name="house" /></span>HomeLink<span class="brand-dot">.</span></a>
+    <div class="sidebar-scroll">
     <div class="sidebar-label">YOUR HOME, SORTED</div>
     <nav class="nav-main">
         <a href="{{ route('home') }}" class="nav-link {{ request()->routeIs('home','services.*') ? 'active' : '' }}"><x-icon name="layout-grid" />Explore services</a>
@@ -27,8 +28,9 @@
     </nav>
     <div class="sidebar-label nav-second-label">A LITTLE GUIDANCE</div>
     <a href="{{ route('how') }}" class="nav-link {{ request()->routeIs('how') ? 'active' : '' }}"><x-icon name="circle-help" />How it works</a>
+    <div class="side-note"><span class="note-icon"><x-icon name="sprout" /></span><h3>A home in good hands.</h3><p>Everyday jobs. Local people.<br>A little more peace of mind.</p><a href="{{ route('how') }}">Get to know HomeLink <x-icon name="arrow-up-right" /></a></div>
+    </div>
     <div class="sidebar-bottom">
-        <div class="side-note"><span class="note-icon"><x-icon name="sprout" /></span><h3>A home in good hands.</h3><p>Everyday jobs. Local people.<br>A little more peace of mind.</p><a href="{{ route('how') }}">Get to know HomeLink <x-icon name="arrow-up-right" /></a></div>
         @auth<div class="account-row"><span class="avatar">{{ auth()->user()->initials() }}</span><a href="{{ route('profile') }}"><strong>{{ Str::limit(auth()->user()->name,20) }}</strong><small>{{ ucfirst(auth()->user()->role) }} account</small></a><form method="POST" action="{{ route('logout') }}">@csrf<button class="icon-button" title="Sign out" aria-label="Sign out"><x-icon name="log-out" /></button></form></div>@else
         <div class="sidebar-footer"><span class="online-dot"></span>Made for everyday living</div>
         @endauth
