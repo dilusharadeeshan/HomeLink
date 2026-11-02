@@ -9,7 +9,7 @@
         <div class="card-location"><x-icon name="map-pin" />{{ $listing->city }} <span class="rating"><x-icon name="star" />{{ $listing->reviews_count ? number_format($listing->reviews_avg_rating,1) : 'New' }}@if($listing->reviews_count)<small>({{ $listing->reviews_count }})</small>@endif</span></div>
         <h3><a href="{{ route('services.show',$listing->slug) }}">{{ $listing->title }}</a></h3>
         <p class="card-description">{{ Str::limit($listing->description,82) }}</p>
-        <div class="provider-line"><span class="avatar avatar-small color-{{ $listing->category->color }}">{{ $listing->provider->initials() }}</span><span>{{ $listing->provider->name }}</span><x-icon name="user-round" class="teal" /></div>
+        <div class="provider-line"><span class="avatar avatar-small color-{{ $listing->category->color }}">@if($listing->provider->profilePhotoUrl())<img class="avatar-image" src="{{ $listing->provider->profilePhotoUrl() }}" alt="">@else{{ $listing->provider->initials() }}@endif</span><span>{{ $listing->provider->name }}</span><x-icon name="user-round" class="teal" /></div>
         <div class="card-bottom"><div><small>Starting from</small><strong>LKR {{ number_format($listing->price) }}</strong></div><a class="card-cta" href="{{ route('services.show',$listing->slug) }}">View service <x-icon name="arrow-right" /></a></div>
     </div>
 </article>

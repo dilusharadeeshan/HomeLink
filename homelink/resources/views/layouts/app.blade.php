@@ -31,7 +31,7 @@
     <div class="side-note"><span class="note-icon"><x-icon name="sprout" /></span><h3>A home in good hands.</h3><p>Everyday jobs. Local people.<br>A little more peace of mind.</p><a href="{{ route('how') }}">Get to know HomeLink <x-icon name="arrow-up-right" /></a></div>
     </div>
     <div class="sidebar-bottom">
-        @auth<div class="account-row"><span class="avatar">{{ auth()->user()->initials() }}</span><a href="{{ route('profile') }}"><strong>{{ Str::limit(auth()->user()->name,20) }}</strong><small>{{ ucfirst(auth()->user()->role) }} account</small></a><form method="POST" action="{{ route('logout') }}">@csrf<button class="icon-button" title="Sign out" aria-label="Sign out"><x-icon name="log-out" /></button></form></div>@else
+        @auth<div class="account-row"><span class="avatar">@if(auth()->user()->profilePhotoUrl())<img class="avatar-image" src="{{ auth()->user()->profilePhotoUrl() }}" alt="">@else{{ auth()->user()->initials() }}@endif</span><a href="{{ route('profile') }}"><strong>{{ Str::limit(auth()->user()->name,20) }}</strong><small>{{ ucfirst(auth()->user()->role) }} account</small></a><form method="POST" action="{{ route('logout') }}">@csrf<button class="icon-button" title="Sign out" aria-label="Sign out"><x-icon name="log-out" /></button></form></div>@else
         <div class="sidebar-footer"><span class="online-dot"></span>Made for everyday living</div>
         @endauth
     </div>
@@ -40,7 +40,7 @@
     <header class="topbar">
         <button class="icon-button mobile-menu" @click="menuOpen=!menuOpen" aria-label="Toggle navigation" :aria-expanded="menuOpen"><x-icon name="menu" /></button>
         <div class="breadcrumb">HomeLink <span>/</span> <strong>@yield('eyebrow','Explore services')</strong></div>
-        <div class="top-actions">@if(config('homelink.demo'))<span class="demo-badge" title="Fictional accounts and reviews for the project demonstration">DEMO</span>@endif<span class="location"><x-icon name="map-pin" />Sri Lanka</span><span class="top-divider"></span>@auth<a class="avatar top-avatar" href="{{ route('profile') }}" aria-label="Open your profile">{{ auth()->user()->initials() }}</a>@else<a class="login-link" href="{{ route('login') }}">Log in</a><a class="btn btn-small btn-dark" href="{{ route('register') }}">Get started <x-icon name="arrow-up-right" /></a>@endauth</div>
+        <div class="top-actions">@if(config('homelink.demo'))<span class="demo-badge" title="Fictional accounts and reviews for the project demonstration">DEMO</span>@endif<span class="location"><x-icon name="map-pin" />Sri Lanka</span><span class="top-divider"></span>@auth<a class="avatar top-avatar" href="{{ route('profile') }}" aria-label="Open your profile">@if(auth()->user()->profilePhotoUrl())<img class="avatar-image" src="{{ auth()->user()->profilePhotoUrl() }}" alt="">@else{{ auth()->user()->initials() }}@endif</a>@else<a class="login-link" href="{{ route('login') }}">Log in</a><a class="btn btn-small btn-dark" href="{{ route('register') }}">Get started <x-icon name="arrow-up-right" /></a>@endauth</div>
     </header>
     <main id="main-content" class="main-content">
         @if(session('success'))<div class="flash flash-success" role="status"><x-icon name="circle-check" /><span>{{ session('success') }}</span></div>@endif

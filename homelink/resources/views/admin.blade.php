@@ -22,7 +22,7 @@
     <div class="table-wrap"><table><thead><tr><th>Account</th><th>Role</th><th>Location</th><th>Status</th><th>Manage</th></tr></thead><tbody>
     @forelse($users as $user)
         <tr>
-            <td><div class="table-person"><span class="avatar avatar-small">{{ $user->initials() }}</span><span><strong>{{ $user->name }}</strong><small>{{ $user->email }}</small></span></div></td>
+            <td><div class="table-person"><span class="avatar avatar-small">@if($user->profilePhotoUrl())<img class="avatar-image" src="{{ $user->profilePhotoUrl() }}" alt="">@else{{ $user->initials() }}@endif</span><span><strong>{{ $user->name }}</strong><small>{{ $user->email }}</small></span></div></td>
             <td>
                 @if($user->id !== auth()->id())
                     <form method="POST" action="{{ route('admin.users.role', $user) }}" class="admin-inline-form">@csrf @method('PATCH')

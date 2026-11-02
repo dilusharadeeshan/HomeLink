@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 
@@ -54,8 +55,19 @@ class AuthController extends Controller
             'email' => ['required', 'email', 'max:255', Rule::unique('users')->ignore($request->user()->id)->where(fn ($query) => $query->whereRaw('LOWER(email) = ?', [mb_strtolower(trim($request->input('email')))]))],
             'phone' => ['required', 'regex:/^[+0-9 ()-]{9,20}$/'], 'city' => ['required', 'string', 'max:80'],
             'bio' => ['nullable', 'string', 'max:1500'],
+            'profile_photo' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
         ]);
-        $request->user()->update($data);
+        $user = $request->user();
+        unset($data['profile_photo']);
+        $user->update($data);
+
+        if ($request->hasFile('profile_photo')) {
+            $oldPhoto = $user->profile_photo_path;
+            $user->update(['profile_photo_path' => $request->file('profile_photo')->store('profile-photos', 'public')]);
+            if ($oldPhoto) {
+                Storage::disk('public')->delete($oldPhoto);
+            }
+        }
 
         return back()->with('success', 'Your profile has been updated.');
     }
