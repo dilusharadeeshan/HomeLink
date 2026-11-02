@@ -13,7 +13,7 @@
                 <tr><td style="background-color:#ffffff;border:1px solid #e4ebe8;border-radius:14px;padding:36px 34px;">
                     <p style="margin:0 0 10px;color:#167d6b;font-size:12px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;">Booking update · {{ $booking->reference() }}</p>
                     <h1 style="margin:0 0 14px;font-size:26px;line-height:1.25;color:#193038;">{{ $heading }}</h1>
-                    <p style="margin:0 0 24px;font-size:15px;line-height:1.7;color:#65766b;">Hi {{ $recipientName }}, {{ $message }}</p>
+                    <p style="margin:0 0 24px;font-size:15px;line-height:1.7;color:#65766b;">Hi {{ $recipientName }}, {{ $introText }}</p>
 
                     <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="margin:0 0 24px;background-color:#f7f9f8;border-radius:10px;">
                         <tr><td style="padding:16px 18px;border-bottom:1px solid #e4ebe8;"><span style="display:block;color:#78867f;font-size:11px;">SERVICE</span><strong style="display:block;margin-top:4px;font-size:14px;color:#193038;">{{ $booking->service_title }}</strong></td></tr>

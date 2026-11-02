@@ -101,8 +101,12 @@ class BookingControllerTest extends TestCase
     public function test_rejection_releases_the_provider_slot(): void
     {
         $booking = $this->reserved();
-        $this->actingAs($booking->provider)->patch('/bookings/'.$booking->id.'/status', ['status' => 'rejected'])->assertSessionHasNoErrors();
+        $this->actingAs($booking->provider)->patch('/bookings/'.$booking->id.'/status', [
+            'status' => 'rejected',
+            'rejection_reason' => 'I am unavailable for this appointment.',
+        ])->assertSessionHasNoErrors();
         $this->assertDatabaseHas('bookings', ['id' => $booking->id, 'status' => 'rejected']);
+        $this->assertDatabaseHas('bookings', ['id' => $booking->id, 'rejection_reason' => 'I am unavailable for this appointment.']);
         $this->assertDatabaseCount('booking_slots', 0);
     }
 
@@ -161,7 +165,7 @@ class BookingControllerTest extends TestCase
     public function test_invalid_review_rating_is_rejected(): void
     {
         $booking = Booking::factory()->create(['status' => 'completed']);
-        $this->actingAs($booking->customer)->post('/bookings/'.$booking->id.'/review',['rating' => 6, 'comment' => 'Careful work and clear communication.'])->assertSessionHasErrors('rating');
-        $this->assertDatabaseCount('reviews',0);
+        $this->actingAs($booking->customer)->post('/bookings/'.$booking->id.'/review', ['rating' => 6, 'comment' => 'Careful work and clear communication.'])->assertSessionHasErrors('rating');
+        $this->assertDatabaseCount('reviews', 0);
     }
 }

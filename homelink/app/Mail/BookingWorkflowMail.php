@@ -33,7 +33,7 @@ class BookingWorkflowMail extends Mailable implements ShouldQueue
             with: [
                 'recipientName' => $providerNotice ? $this->booking->provider->name : $this->booking->customer->name,
                 'heading' => $this->heading(),
-                'message' => $this->message(),
+                'introText' => $this->message(),
                 'providerNotice' => $providerNotice,
                 'event' => $this->event,
                 'bookingUrl' => route('bookings.show', $this->booking),
